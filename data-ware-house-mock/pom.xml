@@ -11,6 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-ware-house-mock</artifactId>
+    <packaging>jar</packaging>
     <description>模拟产生数据</description>
 
     <dependencies>
@@ -43,6 +44,7 @@
 
     <!--编译打包插件-->
     <build>
+        <finalName>data-ware-house-mock</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -75,6 +77,16 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

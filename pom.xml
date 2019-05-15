@@ -7,6 +7,8 @@
     <groupId>com.yxbuild</groupId>
     <artifactId>data-ware-house-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>数仓项目的父工程</description>
 
     <modules>
         <module>data-ware-house-mock</module>
