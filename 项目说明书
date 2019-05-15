@@ -1,6 +1,10 @@
 一、概述
     该项目为数据仓库管理的项目，模拟电子商品平台进行数据采集、清洗、分析和存储等操作，进而对数据进行分析和统计。其中，日志分为启动日志和行为日志两大类。
+    1. 启动日志格式为JSON字符，并且{"en":"start"},如下
+    {"action":"2","ar":"MX","ba":"Sumsung","detail":"","en":"start","entry":"1","extend1":"","g":"1C6M27BZ@gmail.com","hw":"750*1134","l":"es","la":"-36.0","ln":"-78.9","loading_time":"9","md":"sumsung-3","mid":"0","nw":"3G","open_ad_type":"2","os":"8.1.1","sr":"G","sv":"V2.9.5","t":"1557841766453","uid":"0","vc":"4","vn":"1.0.0"}
 
+    2.行为日志格式为：时间戳|用户操作基础信息等，如下
+    {"action":"1","ar":"MX","ba":"Huawei","detail":"","en":"start","entry":"2","extend1":"","g":"43X82X63@gmail.com","hw":"640*1136","l":"en","la":"24.1","ln":"-41.5","loading_time":"15","md":"Huawei-14","mid":"2","nw":"4G","open_ad_type":"1","os":"8.2.9","sr":"T","sv":"V2.3.9","t":"1557784805521","uid":"2","vc":"4","vn":"1.0.3"}
 
 二、业务流程(其中Kafka重要作用：1.削峰 2.为以后实时做好准备)
     日志文件 -> Flume -> Kafka -> Flume -> HDFS -> Hive(分层：ODS -> DWD -> DWS -> ADS) -> 用户画像、报表系统等
@@ -26,9 +30,11 @@
             a1.sources.r1.fileHeader = true
 
         (2) 定义拦截器进行对数据过滤
-            ① 清洗链接器(启动日志的格式是否符合JSON、行为日志的时间戳和数据格式是否正确)
+            ① 清洗拦截器(启动日志的格式是否符合JSON、行为日志的时间戳和数据格式是否正确)
                 com.yxBuild.interceptor.LogETLInterceptor
-            ②
+
+            ② 日志类型拦截器(根据启动日志和行为日志进行添加Header值,从而设置Kafka Channel进行对应的Topic进行生产数据)
+                com.yxBuild.interceptor.LogTypeInterceptor
 
     3) 启动Agent并且将数据保存到Kafka
 

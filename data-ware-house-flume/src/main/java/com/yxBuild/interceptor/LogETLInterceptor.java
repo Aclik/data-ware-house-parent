@@ -71,6 +71,7 @@ public class LogETLInterceptor implements Interceptor {
 
     /**
      * 关闭资源(只调用一次)
+     *
      */
     public void close() {
 
