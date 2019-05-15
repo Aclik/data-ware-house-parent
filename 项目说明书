@@ -36,6 +36,43 @@
             ② 日志类型拦截器(根据启动日志和行为日志进行添加Header值,从而设置Kafka Channel进行对应的Topic进行生产数据)
                 com.yxBuild.interceptor.LogTypeInterceptor
 
-    3) 启动Agent并且将数据保存到Kafka
+            ③ 将编写好的拦截器项目编译成Jar并且上传到Flume的lib文件夹下
+
+            ④ 在Agent配置文件夹中定义并且关联拦截器
+                # Resource关联自定义的拦截器
+                a1.sources.r1.interceptors =  i1 i2
+                a1.sources.r1.interceptors.i1.type = com.yxBuild.interceptor.LogETLInterceptor$Builder
+                a1.sources.r1.interceptors.i2.type = com.yxBuild.interceptor.LogTypeInterceptor$Builder
+
+        (3) 在Agent配置文件中定义Channel Selector(Channel选择器)并且进行配置
+            # 配置Source关联Channel选择器
+            a1.sources.r1.selector.type = multiplexing
+            a1.sources.r1.selector.header = topic
+            a1.sources.r1.selector.mapping.topic_start = c1
+            a1.sources.r1.selector.mapping.topic_event = c2
+
+        (4) 配置Channel并且与Source进行关联
+            # 声明并且配置Channel
+            a1.channels=c1 c2
+            a1.channels.c1.type = org.apache.flume.channel.kafka.KafkaChannel
+            a1.channels.c1.kafka.bootstrap.servers = hadoop103:9092,hadoop104:9092,hadoop105:9092
+            a1.channels.c1.kafka.topic = topic_start
+            a1.channels.c1.parseAsFlumeEvent = false
+            a1.channels.c1.kafka.consumer.group.id = flume-consumer
+
+            a1.channels.c2.type = org.apache.flume.channel.kafka.KafkaChannel
+            a1.channels.c2.kafka.bootstrap.servers = hadoop103:9092,hadoop104:9092,hadoop105:9092
+            a1.channels.c2.kafka.topic = topic_event
+            a1.channels.c2.parseAsFlumeEvent = false
+            a1.channels.c2.kafka.consumer.group.id = flume-consumer
+
+            # Source关联Channel
+            a1.sources.r1.channels = c1 c2
+
+    3) 将脚本Agent的agent-tailDir-kafka.conf上传到服务器并且进行启动
+        1) 在Kafka创建相关的主题topic_start、topic_event
+
+        2) 启动Agent(agent-tailDir-kafka.conf)脚本
+        /opt/module/flume-1.7.0/bin/flume-ng agent --conf /opt/module/flume-1.7.0/conf/ --name a1 --conf-file agent-tailDir-kafka.conf
 
 

@@ -1,8 +1,10 @@
 package com.yxBuild.interceptor;
 
+import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,10 +54,12 @@ public class LogTypeInterceptor implements Interceptor {
      */
     @Override
     public List<Event> intercept(List<Event> events) {
+        List<Event> interceptors = new ArrayList<>();
         for (Event event : events) {
-            intercept(event);
+            Event intercept = intercept(event);
+            interceptors.add(intercept);
         }
-        return events;
+        return interceptors;
     }
 
     /**
@@ -65,5 +69,20 @@ public class LogTypeInterceptor implements Interceptor {
     @Override
     public void close() {
 
+    }
+
+    /**
+     * 创建内部类Builder
+     *
+     */
+    public static class Builder implements Interceptor.Builder{
+        @Override
+        public Interceptor build() {
+            return new LogTypeInterceptor();
+        }
+        @Override
+        public void configure(Context context) {
+
+        }
     }
 }

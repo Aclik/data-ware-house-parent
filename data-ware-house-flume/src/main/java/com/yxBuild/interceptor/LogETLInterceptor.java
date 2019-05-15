@@ -1,6 +1,7 @@
 package com.yxBuild.interceptor;
 
 import com.yxBuild.utils.LogUtil;
+import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
 
@@ -75,5 +76,20 @@ public class LogETLInterceptor implements Interceptor {
      */
     public void close() {
 
+    }
+
+    /**
+     * 创建内部类Builder
+     *
+     */
+    public static class Builder implements Interceptor.Builder{
+        @Override
+        public Interceptor build() {
+            return new LogETLInterceptor();
+        }
+        @Override
+        public void configure(Context context) {
+
+        }
     }
 }

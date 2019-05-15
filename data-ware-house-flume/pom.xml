@@ -22,7 +22,7 @@
 
     <!--编译打包插件-->
     <build>
-        <finalName>data-ware-house-mock</finalName>
+        <finalName>data-ware-house-flume</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
