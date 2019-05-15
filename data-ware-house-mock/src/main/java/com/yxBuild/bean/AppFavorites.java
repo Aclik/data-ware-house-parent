@@ -1,4 +1,4 @@
-package com.yxbuild.bean;
+package com.yxBuild.bean;
 
 import lombok.Data;
 

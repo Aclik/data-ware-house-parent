@@ -5,13 +5,13 @@
 
     <parent>
         <artifactId>data-ware-house-parent</artifactId>
-        <groupId>com.yxbuild</groupId>
+        <groupId>com.yxBuild</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-ware-house-mock</artifactId>
-    <packaging>jar</packaging>
+
     <description>模拟产生数据</description>
 
     <dependencies>
@@ -63,7 +63,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.yxbuild.ProductDataApp</mainClass>
+                            <mainClass>com.yxBuild.ProductDataApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -76,15 +76,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
             </plugin>
 
         </plugins>

@@ -1,0 +1,31 @@
+一、概述
+    该项目为数据仓库管理的项目，模拟电子商品平台进行数据采集、清洗、分析和存储等操作，进而对数据进行分析和统计
+
+二、业务流程
+    日志文件 -> Flume -> Kafka -> Flume -> HDFS -> Hive(分层：ODS -> DWD -> DWS -> ADS) -> 用户画像、报表系统等
+
+三、将data-ware-house-mock打包并且上传到服务器，并且执行以下命令进行模拟产生数据(每隔2秒产生一条数据,总共产生10条)
+    java -classpath /opt/project/data-ware-house/data-ware-house-mock.jar com.yxBuild.ProductDataApp 2 10
+
+四、搭建集群
+
+五、配置第一层Flume采集数据
+    1) Agent选型
+        Source类型为TailDir Source(注：Flume 1.7提供的Source组件，在1.6中并没有)
+        Channel类型为KafkaChannel(好处：省去Sink组件,并且提高数据的吞吐量、安全性)
+
+    2) 配置第一个Agent(agent-tailDir-kafka.conf),进行接收数据并且保存到KafkaChannel中
+        (1) 配置Source
+            # 声明并且配置Source
+            a1.sources=r1
+            a1.sources.r1.type = TAILDIR
+            a1.sources.r1.positionFile = /opt/project/data-ware-house/log_position.json
+            a1.sources.r1.filegroups = f1
+            a1.sources.r1.filegroups.f1 = /opt/project/data-ware-house/data/app.+
+            a1.sources.r1.fileHeader = true
+
+        (2) 定义拦截器进行对数据过滤
+
+    3) 启动Agent并且将数据保存到Kafka
+
+
