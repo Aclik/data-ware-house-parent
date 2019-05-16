@@ -76,3 +76,10 @@
         /opt/module/flume-1.7.0/bin/flume-ng agent --conf /opt/module/flume-1.7.0/conf/ --name a1 --conf-file agent-tailDir-kafka.conf
 
 
+
+六、配置第二层Flume采集数据(agent-kafka-file-hdfs.conf)
+    1) 模型: Kafka Source(两个Source) -> File Channel(两个File Channel) -> HDFS Sink(两个Sink输出)
+        Source: Kafka Source
+        Channel: File Channel
+        Sink: HDFS Sink
+    2)
