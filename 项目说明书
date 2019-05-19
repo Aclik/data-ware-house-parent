@@ -82,4 +82,65 @@
         Source: Kafka Source
         Channel: File Channel
         Sink: HDFS Sink
-    2)
+
+    2) 为了防止Flume输出产生大量的小文件
+        ① 配置Sink10分钟和文件大小为128M时候进行滚动输出一次
+
+七、创建原始层数据表
+    1）启动日志原始层数据表
+        create external table ods_start_log(
+        line string
+        )
+        partitioned by (dt string)
+        stored as
+          inputformat 'com.hadoop.mapred.DeprecatedLzoTextInputFormat'
+          outputformat 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        location '/project/data-ware-house/origin_data/gmall/hive/ods/ods_start_log';
+    2）行为日志原始层数据表
+        create external table ods_event_log(
+        line string
+        )
+        partitioned by (dt string)
+        stored as
+          inputformat 'com.hadoop.mapred.DeprecatedLzoTextInputFormat'
+          outputformat 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+        location '/project/data-ware-house/origin_data/gmall/hive/ods/ods_event_log';
+     3）导入数据
+        ① 开始日志的原始层
+            load data inpath '/project/data-ware-house/origin_data/gmall/log/topic_start/2019-05-16' into table  ods_start_log partition(dt='2019-05-16');
+
+        ② 启动日志的原始层
+            load data inpath '/project/data-ware-house/origin_data/gmall/log/topic_event/2019-05-18' into table ods_event_log partition(dt = '2019-05-18');
+
+        提出疑问：在第二层Flume中,如果将数据动态分区的将数据导入到Hive中?
+            解决思路：编写Shell脚本,获取当前日期,从而执行load data 命令
+
+八、创建数据详细层---对原始数据层的数据进行清洗
+    1） 启动日志详细表(dwd_start_log)---对原始层的数据表的JSON的字段值进行切分保存
+        ① 创建启动日志详细表，使用get_json_object函数,将line字段值对象值进行获取并保存
+
+    2）对行为数据进行分类保存到数据表
+        ① 创建事件基础表(dwd_base_event_log),保存共同字段信息、事件名称、事件的JSON数据
+
+        ② 根据事件基础表中的事件名称,进行将事件数据进行归类,并且保存导行为详细数据表中
+
+        ③
+    问题记录：
+        1）如何定义UDF函数?定义UDF函数的作用是什么?
+            UDF函数是一进一出函数,即是一条记录进去返回一行信息,定义UDF函数需要继承Hive的UDF类,并且重载它的evaluate方法,
+            在数仓项目中定义,UDF主要是解析行为日志的共同部分的数据,从而以制表符作为分割符合返回,使用Hive自带的Split函数
+            进一步获取每个属性值
+        2) 如何定义UDTF函数?在项目中所用的目的是什么?
+            UDTF为一进多出函数,自定义UDTF函数需要继承GenericUDTF类,并且重写initialize、process、close方法;在项目中主要
+            处理用户行为日志,解析行为日志的数据,获取每个行为日志的名称
+        3) 将自定义的UDF、UDTF函数进行打包,并且上传到服务器的Hive安装目录中的lib目录下
+
+        4) 将自定义的函数进行临时关联
+            ① 将函数JAR加入到Hive的classpath中
+                hive (gmall2)> add jar /opt/module/hive-1.2.1/lib/data-ware-house-hive-1.0-SNAPSHOT.jar;
+                hive (gmall2)>  create temporary function base_analizer as 'com.yxBuild.UDF.BaseFieldUDF';
+                hive (gmall2)>  create temporary function flat_analizer as 'com.yxBuild.UDTF.EventJsonUDTF';
+                注： 创建永久函数,去掉temporary执行即可
+        5) 将原始层的行为日志,解析导入到DWD层
+
+

@@ -7,6 +7,7 @@ import lombok.Data;
  */
 @Data
 public class AppComment {
+
     private int comment_id;//评论表
 
     private int userid;//用户id

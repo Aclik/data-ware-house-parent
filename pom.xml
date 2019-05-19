@@ -13,6 +13,7 @@
     <modules>
         <module>data-ware-house-mock</module>
         <module>data-ware-house-flume</module>
+        <module>data-ware-house-hive</module>
     </modules>
 
     <!--版本号统一-->
