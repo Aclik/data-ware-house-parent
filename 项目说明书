@@ -1,10 +1,94 @@
 一、概述
     该项目为数据仓库管理的项目，模拟电子商品平台进行数据采集、清洗、分析和存储等操作，进而对数据进行分析和统计。其中，日志分为启动日志和行为日志两大类。
     1. 启动日志格式为JSON字符，并且{"en":"start"},如下
-    {"action":"2","ar":"MX","ba":"Sumsung","detail":"","en":"start","entry":"1","extend1":"","g":"1C6M27BZ@gmail.com","hw":"750*1134","l":"es","la":"-36.0","ln":"-78.9","loading_time":"9","md":"sumsung-3","mid":"0","nw":"3G","open_ad_type":"2","os":"8.1.1","sr":"G","sv":"V2.9.5","t":"1557841766453","uid":"0","vc":"4","vn":"1.0.0"}
+    {
+    	"action": "2",
+    	"ar": "MX",
+    	"ba": "Sumsung",
+    	"detail": "",
+    	"en": "start",
+    	"entry": "1",
+    	"extend1": "",
+    	"g": "1C6M27BZ@gmail.com",
+    	"hw": "750*1134",
+    	"l": "es",
+    	"la": "-36.0",
+    	"ln": "-78.9",
+    	"loading_time": "9",
+    	"md": "sumsung-3",
+    	"mid": "0",
+    	"nw": "3G",
+    	"open_ad_type": "2",
+    	"os": "8.1.1",
+    	"sr": "G",
+    	"sv": "V2.9.5",
+    	"t": "1557841766453",
+    	"uid": "0",
+    	"vc": "4",
+    	"vn": "1.0.0"
+    }
 
-    2.行为日志格式为：时间戳|用户操作基础信息等，如下
-    {"action":"1","ar":"MX","ba":"Huawei","detail":"","en":"start","entry":"2","extend1":"","g":"43X82X63@gmail.com","hw":"640*1136","l":"en","la":"24.1","ln":"-41.5","loading_time":"15","md":"Huawei-14","mid":"2","nw":"4G","open_ad_type":"1","os":"8.2.9","sr":"T","sv":"V2.3.9","t":"1557784805521","uid":"2","vc":"4","vn":"1.0.3"}
+    2.行为日志格式为："共同属性+时间戳 + | + 行为集"用户操作基础信息等，如下
+    1557883491565 | {
+    	"cm": {
+    		"ln": "-80.9",
+    		"sv": "V2.2.8",
+    		"os": "8.0.8",
+    		"g": "U5HOH584@gmail.com",
+    		"mid": "37",
+    		"nw": "WIFI",
+    		"l": "en",
+    		"vc": "18",
+    		"hw": "1080*1920",
+    		"ar": "MX",
+    		"uid": "37",
+    		"t": "1557796007093",
+    		"la": "-10.4",
+    		"md": "Huawei-18",
+    		"vn": "1.1.5",
+    		"ba": "Huawei",
+    		"sr": "A"
+    	},
+    	"ap": "gmall",
+    	"et": [{
+    		"ett": "1557841713573",
+    		"en": "loading",
+    		"kv": {
+    			"extend2": "",
+    			"loading_time": "40",
+    			"action": "1",
+    			"extend1": "",
+    			"type": "2",
+    			"type1": "",
+    			"loading_way": "2"
+    		}
+    	}, {
+    		"ett": "1557828739181",
+    		"en": "notification",
+    		"kv": {
+    			"ap_time": "1557854867024",
+    			"action": "1",
+    			"type": "3",
+    			"content": ""
+    		}
+    	}, {
+    		"ett": "1557793047938",
+    		"en": "active_foreground",
+    		"kv": {
+    			"access": "1",
+    			"push_id": "1"
+    		}
+    	}, {
+    		"ett": "1557797333985",
+    		"en": "favorites",
+    		"kv": {
+    			"course_id": 3,
+    			"id": 0,
+    			"add_time": "1557866826036",
+    			"userid": 4
+    		}
+    	}]
+    }
 
 二、业务流程(其中Kafka重要作用：1.削峰 2.为以后实时做好准备)
     日志文件 -> Flume -> Kafka -> Flume -> HDFS -> Hive(分层：ODS -> DWD -> DWS -> ADS) -> 用户画像、报表系统等
