@@ -136,6 +136,9 @@
             ④ 保存3副本 -> 18T × 3 = 54 T
             ⑤ 预留20%到30%Buf -> 5.4T ÷ 0.7 = 77T
             ⑥ 总共需要硬盘容量为77T,那就是10台8T硬盘容量的服务器
+       (5) 服务器搭建规划
+            ① 哪些服务器装哪些框架,需要进行一个规划
+            ② 尽量让耗内存的子服务分开，比如NameNode、SecondaryNameNode、RedouceManager
 
 二、业务流程(其中Kafka重要作用：1.削峰 2.为以后实时做好准备)
     日志文件 -> Flume -> Kafka -> Flume -> HDFS -> Hive(分层：ODS -> DWD -> DWS -> ADS) -> 用户画像、报表系统等
